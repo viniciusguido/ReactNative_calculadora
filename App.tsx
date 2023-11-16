@@ -6,7 +6,7 @@
  * @format
  */
 import React from 'react';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -77,7 +77,7 @@ const App = () => {
         (parseFloat(splitNumbers[0]) - parseFloat(splitNumbers[2])).toString(),
       );
     }
-  }
+  };
 
   const handleInput = (buttonPressed: string) => {
     if (
@@ -103,11 +103,24 @@ const App = () => {
     }
     if (buttonPressed === '=') {
       setLastNumber(currentNumber + '=');
+      // Para calcular, é preciso chamar a função calculator após clicar no butão '='
+      calculator();
       return;
     }
     setCurrentNumber(currentNumber + buttonPressed);
   };
-  setCurrentNumber(currentNumber.substring(0, currentNumber.length - 1));
+
+  useEffect(() => {
+    // isso aqui limita o quanto vai atualizar o current number, para no máximo 20 caracteres
+    // length representa o tamanho do texto presente dentro do currentNumber
+    if (currentNumber.length > 0 && currentNumber.length < 20) {
+      // Esse trecho cuida da atualização dos números em tempo real, evitando aquele erro de loop infinito, porque se der algum erro, então esse trecho trata o erro (na maioria dos casos)
+      setCurrentNumber(currentNumber.substring(0, currentNumber.length - 1));
+    }
+
+    // a linha de baixo, atualiza o currentNumber sempre que ele sofrer alguma alteração
+  }, [currentNumber]);
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -130,7 +143,10 @@ const App = () => {
         <View style={styles.buttons}>
           {buttons.map(button => {
             return (
-              <TouchableOpacity style={styles.button} key={button}>
+              <TouchableOpacity
+                style={styles.button}
+                key={button}
+                onPress={() => handleInput(button)}>
                 <Text style={styles.textButton}> {button}</Text>
               </TouchableOpacity>
             );
