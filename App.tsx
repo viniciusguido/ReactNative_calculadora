@@ -16,7 +16,6 @@ import {
   useColorScheme,
   View,
   TouchableOpacity,
-  Button,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -27,7 +26,27 @@ const App = () => {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-  const buttons = ['AC', 'DEL', '%', '/', '7', '8', '9', '*', '4', '5', '6', '-', '3', '2', '1', '+', '0', '.', '+/-', '='
+  const buttons = [
+    'AC',
+    'DEL',
+    '%',
+    '/',
+    '7',
+    '8',
+    '9',
+    '*',
+    '4',
+    '5',
+    '6',
+    '-',
+    '3',
+    '2',
+    '1',
+    '+',
+    '0',
+    '.',
+    '+/-',
+    '=',
   ];
 
   return (
@@ -49,11 +68,12 @@ const App = () => {
           <Text style={{fontSize: 20, margin: 10}}>2+2=5</Text>
         </View>
         <View style={styles.buttons}>
-          {buttons.map(button =>(
+          {buttons.map(button => (
             <TouchableOpacity key={button} style={styles.button}>
               <Text style={styles.textButton}>{button}</Text>
             </TouchableOpacity>
-          ))};
+          ))}
+          ;
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -69,7 +89,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
     width: '100%',
-    height: '300',
+    height: 300,
     backgroundColor: 'cyan',
   },
   buttons: {
@@ -81,8 +101,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
     backgroundColor: 'white',
-    minHeight: '80',
-    minWidth: '80',
+    minHeight: 80,
+    minWidth: 80,
   },
   textButton: {
     color: '#5b5b5b',
