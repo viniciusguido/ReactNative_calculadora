@@ -68,11 +68,13 @@ const App = () => {
           <Text style={{fontSize: 20, margin: 10}}>2+2=5</Text>
         </View>
         <View style={styles.buttons}>
-          {buttons.map(button => (
-            <TouchableOpacity key={button} style={styles.button}>
-              <Text style={styles.textButton}>{button}</Text>
-            </TouchableOpacity>
-          ))}
+          {buttons.map(button => {
+            return (
+              <TouchableOpacity key={button} style={styles.button}>
+                <Text style={styles.textButton}>{button}</Text>
+              </TouchableOpacity>
+            );
+          })}
           ;
         </View>
       </ScrollView>
