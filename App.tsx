@@ -5,8 +5,8 @@
  *
  * @format
  */
-
 import React from 'react';
+import {useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -49,6 +49,65 @@ const App = () => {
     '=',
   ];
 
+  const [currentNumber, setCurrentNumber] = useState('');
+  const [lastNumber, setLastNumber] = useState('');
+
+  const calculator = () => {
+    const splitNumbers = currentNumber.split(' ');
+    const operator = splitNumbers[1];
+    console.log(splitNumbers);
+
+    if (operator === '*') {
+      setCurrentNumber(
+        (parseFloat(splitNumbers[0]) * parseFloat(splitNumbers[2])).toString(),
+      );
+    }
+    if (operator === '/') {
+      setCurrentNumber(
+        (parseFloat(splitNumbers[0]) / parseFloat(splitNumbers[2])).toString(),
+      );
+    }
+    if (operator === '+') {
+      setCurrentNumber(
+        (parseFloat(splitNumbers[0]) + parseFloat(splitNumbers[2])).toString(),
+      );
+    }
+    if (operator === '-') {
+      setCurrentNumber(
+        (parseFloat(splitNumbers[0]) - parseFloat(splitNumbers[2])).toString(),
+      );
+    }
+  }
+
+  const handleInput = (buttonPressed: string) => {
+    if (
+      buttonPressed === '*' ||
+      buttonPressed === '/' ||
+      buttonPressed === '+' ||
+      buttonPressed === '-'
+    ) {
+      setCurrentNumber(currentNumber + ' ' + buttonPressed + ' ');
+      return;
+    }
+    if (buttonPressed === '.') {
+      setCurrentNumber(currentNumber + buttonPressed);
+      return;
+    }
+    if (buttonPressed === '+/-') {
+      return;
+    }
+    if (buttonPressed === 'AC') {
+      setLastNumber('');
+      setCurrentNumber('');
+      return;
+    }
+    if (buttonPressed === '=') {
+      setLastNumber(currentNumber + '=');
+      return;
+    }
+    setCurrentNumber(currentNumber + buttonPressed);
+  };
+  setCurrentNumber(currentNumber.substring(0, currentNumber.length - 1));
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -65,7 +124,8 @@ const App = () => {
           <Text style={styles.title}>Calculadora</Text>
         </View>
         <View style={styles.results}>
-          <Text style={{fontSize: 20, margin: 10}}>2+2=5</Text>
+          <Text style={styles.historyText}>{lastNumber}</Text>
+          <Text style={styles.resultText}>{currentNumber}</Text>
         </View>
         <View style={styles.buttons}>
           {buttons.map(button => {
@@ -75,7 +135,6 @@ const App = () => {
               </TouchableOpacity>
             );
           })}
-          ;
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -109,6 +168,19 @@ const styles = StyleSheet.create({
   textButton: {
     color: '#5b5b5b',
     fontSize: 25,
+    textAlign: 'center',
+  },
+  resultText: {
+    fontWeight: '100',
+    fontSize: 80,
+    margin: 10,
+    alignSelf: 'flex-end',
+  },
+  historyText: {
+    fontSize: 22,
+    marginBottom: 0,
+    marginRight: 10,
+    alignSelf: 'flex-end',
   },
 });
 
