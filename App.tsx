@@ -70,8 +70,8 @@ const App = () => {
         <View style={styles.buttons}>
           {buttons.map(button => {
             return (
-              <TouchableOpacity key={button} style={styles.button}>
-                <Text style={styles.textButton}>{button}</Text>
+              <TouchableOpacity style={styles.button} key={button}>
+                <Text style={styles.textButton}> {button}</Text>
               </TouchableOpacity>
             );
           })}
