@@ -7,6 +7,7 @@
  */
 import React from 'react';
 import {useState, useEffect} from 'react';
+import {Button} from 'react-native-paper';
 import {
   SafeAreaView,
   Dimensions,
@@ -15,7 +16,7 @@ import {
   Text,
   useColorScheme,
   View,
-  TouchableOpacity,
+  FlatList,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -50,14 +51,6 @@ const App = () => {
     '.',
     '',
     '=',
-  ];
-
-  const calc_buttons = [
-    ['AC', 'DEL', '%', '/'],
-    ['7', '8', '9', '*'],
-    ['4', '5', '6', '-'],
-    ['3', '2', '1', '+'],
-    ['0', '.', '', '='],
   ];
 
   const [currentNumber, setCurrentNumber] = useState('');
@@ -109,18 +102,20 @@ const App = () => {
       setCurrentNumber('');
       return;
     }
+    if (buttonPressed === 'DEL') {
+      const numeroAtual = currentNumber.substring(0, currentNumber.length - 1);
+      setCurrentNumber(numeroAtual);
+      return;
+    }
     if (buttonPressed === '=') {
       setLastNumber(currentNumber + '=');
-      // Para calcular, é preciso chamar a função calculator após clicar no butão '='
       calculator();
       return;
     }
     setCurrentNumber(currentNumber + buttonPressed);
   };
 
-  useEffect(() => {
-    // a linha de baixo, atualiza o currentNumber sempre que ele sofrer alguma alteração
-  }, [currentNumber]);
+  useEffect(() => {}, [currentNumber]);
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -139,37 +134,29 @@ const App = () => {
         </View>
         <View style={styles.button_container}>
           <View style={styles.buttons}>
-            {buttons.map((button: string) => {
-              // Esse trecho não vai rodar
-              if (button === '=') {
-                // É preciso tratar o button = de uma forma um pouco diferente
-                return (
-                  <TouchableOpacity
-                    style={[
-                      styles.button,
-                      {
-                        backgroundColor: '#ffbf60',
-                        borderRadius: 50,
-                      },
-                    ]}
-                    key={button}
-                    onPress={() => handleInput(button)}>
-                    <Text style={styles.textButton}> {button}</Text>
-                  </TouchableOpacity>
-                );
-              }
-              // o handle input é chamado sempre que um botão é clicado com o onPress
-              // para deixar os botões dinâmicos, é preciso passar a variável button no input
-              // Só esse trecho vai rodarr
-              return (
-                <TouchableOpacity
-                  style={styles.button}
-                  key={button}
-                  onPress={() => handleInput(button)}>
-                  <Text style={styles.textButton}> {button}</Text>
-                </TouchableOpacity>
-              );
-            })}
+            <FlatList
+              data={buttons}
+              keyExtractor={(item: string) => item}
+              numColumns={4}
+              renderItem={(buttonText: any) => (
+                <View>
+                  {buttonText === '=' ? (
+                    <Button
+                      mode="elevated"
+                      onPress={() => handleInput(buttonText)}>
+                      <Text style={styles.textButton}> {buttonText}</Text>
+                    </Button>
+                  ) : (
+                    <Button
+                      mode="elevated"
+                      style={styles.button}
+                      onPress={() => handleInput(buttonText)}>
+                      <Text style={styles.textButton}> {buttonText}</Text>
+                    </Button>
+                  )}
+                </View>
+              )}
+            />
           </View>
         </View>
       </View>
@@ -202,15 +189,13 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 2,
-    justifyContent: 'center',
+    margin: 6,
     alignContent: 'center',
     backgroundColor: 'white',
-    minWidth: windowWidth / 4,
-    minHeight: windowHeight / 9,
   },
   textButton: {
     color: '#5b5b5b',
-    fontSize: 25,
+    fontSize: 18,
     textAlign: 'center',
   },
   resultText: {
